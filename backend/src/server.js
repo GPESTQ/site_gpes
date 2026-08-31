@@ -31,13 +31,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/persons", personsRoutes);
 app.use("/api/papers", papersRoutes);
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-    app.get('(.*)', (req, res) => {
-        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-    });
-}
+app.use((req, res) => {
+  res.status(404).json({ message: "Rota não encontrada na API" });
+});
 
 app.use((err, req, res, next) => {
     console.error("Unhandled error:", err);
