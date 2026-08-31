@@ -34,12 +34,12 @@ app.use("/api/papers", papersRoutes);
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-    app.get("*", (req, res) => {
+    app.get('(.*)', (_, res) => {
         res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
     });
 }
 
-app.use((err, req, res, next) => {
+app.use((err, _, res, _) => {
     console.error("Unhandled error:", err);
     res.status(500).json({ message: "Internal server error" });
 });
