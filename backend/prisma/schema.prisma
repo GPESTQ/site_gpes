@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PersonRole {
+  coordinator
+  professor
+  student
+  alumni
+  collaborator
+}
+
+enum PersonOccupation {
+  researcher
+  frontend_developer
+  backend_developer
+  fullstack_developer
+  software_engineer
+  designer
+}
+
+model Person {
+  id         String           @id @default(cuid())
+  name       String
+  role       PersonRole
+  occupation PersonOccupation
+  photoUrl   String?
+  links      Json?
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  papers PaperAuthor[]
+
+  @@map("persons")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  @@map("admins")
+}
+
+model Paper {
+  id            String        @id @default(cuid())
+  title         String
+  abstract      String
+  publishedAt   DateTime
+  type          PaperType
+  eventJournal  String
+  keywords      String
+  doi           String?
+  pdfUrl        String?
+  authors       PaperAuthor[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("papers")
+}
+
+model PaperAuthor {
+  id       String @id @default(cuid())
+  paper    Paper  @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  paperId  String
+  person   Person @relation(fields: [personId], references: [id])
+  personId String
+  order    Int
+
+  @@unique([paperId, personId])
+  @@map("paper_authors")
+}
+
+enum PaperType {
+  article
+  proceedings
+}

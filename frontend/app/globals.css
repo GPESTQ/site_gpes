@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary-50: #fcf4f2;
+    --color-primary-100: #fae4e1;
+    --color-primary-200: #f6c7c0;
+    --color-primary-300: #f39d90;
+    --color-primary-400: #f36953;
+    --color-primary-500: #f63313;
+    --color-primary-600: #d92202;
+    --color-primary-700: #b21b00;
+    --color-primary-800: #861804;
+    --color-primary-900: #571305;
+    --color-primary-950: #2f0c04;
+
+    --color-danger-50: #fbf4f5;
+    --color-danger-100: #f7e3e8;
+    --color-danger-200: #f2c5d0;
+    --color-danger-300: #ec98ab;
+    --color-danger-400: #e85e7d;
+    --color-danger-500: #e11d48;
+    --color-danger-600: #bb2041;
+    --color-danger-700: #931f37;
+    --color-danger-800: #6d1c2d;
+    --color-danger-900: #46161f;
+    --color-danger-950: #250e12;
+
+    --color-success-50: #f4fbf6;
+    --color-success-100: #e3f7ea;
+    --color-success-200: #c6f0d5;
+    --color-success-300: #9be8b6;
+    --color-success-400: #66e191;
+    --color-success-500: #2ddc6c;
+    --color-success-600: #1ac157;
+    --color-success-700: #16a34a;
+    --color-success-800: #137638;
+    --color-success-900: #0f4d26;
+    --color-success-950: #092a16;
+
+    --color-warning-50: #fcf7f3;
+    --color-warning-100: #f9ede1;
+    --color-warning-200: #f5dcc1;
+    --color-warning-300: #f3c491;
+    --color-warning-400: #f2a754;
+    --color-warning-500: #f68b14;
+    --color-warning-600: #d97706;
+    --color-warning-700: #a8600a;
+    --color-warning-800: #7d4a0c;
+    --color-warning-900: #51320b;
+    --color-warning-950: #2b1c08;
+
+    --color-neutral-50: #f8f7f7;
+    --color-neutral-100: #eeeced;
+    --color-neutral-200: #dddada;
+    --color-neutral-300: #c4bfc0;
+    --color-neutral-400: #a7a0a0;
+    --color-neutral-500: #898080;
+    --color-neutral-600: #726969;
+    --color-neutral-700: #5d5656;
+    --color-neutral-800: #484242;
+    --color-neutral-900: #302c2c;
+    --color-neutral-950: #1a1a1a;
+
+    --font-sans: var(--font-roboto);
+    --font-display: var(--font-playfair);
+}
