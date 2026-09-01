@@ -39,7 +39,7 @@ const LoginPage = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-neutral-950">
             <div onSubmit={handleSubmit} className="flex flex-col gap-6">
-                <Image src="/logo-gpes.png" alt="Logo do GPES" width={320} height={80} />
+                <Image src="/logo-gpes.png" alt="Logo do GPES" width={320} height={80} priority />
                 <InputField
                     id="email"
                     label="E-mail"

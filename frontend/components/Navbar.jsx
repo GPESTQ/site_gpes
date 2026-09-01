@@ -22,7 +22,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
                     <ListIcon size={24} />
                 </label>
                 <Link href="/pessoas">
-                    <Image src="/logo-gpes.png" alt="Logo do GPES" width={260} height={64} className="w-48 h-12 lg:w-65 lg:h-16" />
+                    <Image src="/logo-gpes.png" alt="Logo do GPES" width={260} height={64} className="w-48 h-12 lg:w-65 lg:h-16" priority />
                 </Link>
             </div>
             <div className={`flex flex-col lg:flex-row items-center justify-center gap-8 px-6 lg:px-20 py-6 lg:py-3 border-b border-neutral-500 lg:flex ${isOpen ? "flex" : "hidden"}`}>

@@ -1,7 +1,7 @@
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 const SearchInput = ({ value, onChange, placeholder = "Buscar...", className = "" }) => (
-    <div className="relative flex max-w-96">
+    <div className="relative flex max-w-96 flex-1">
         <MagnifyingGlassIcon size={24} className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-600" />
         <input
             type="text"

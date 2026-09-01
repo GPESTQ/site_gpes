@@ -19,7 +19,7 @@ const AdminNavbar = ({ setIsOpen }) => {
                 <ListIcon size={24} />
             </label>
 
-            <Image src="/logo-gpes.png" alt="Logo do GPES" width={192} height={48} className="h-12"/>
+            <Image src="/logo-gpes.png" alt="Logo do GPES" width={192} height={48} className="h-12" priority />
         </header>
     );
 };
