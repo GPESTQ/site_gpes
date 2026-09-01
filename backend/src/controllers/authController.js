@@ -28,13 +28,14 @@ export async function login(req, res) {
             where: { email: email.toLowerCase().trim() },
         });
 
-        // Mensagem genérica de propósito — não revela se o e-mail existe ou não
         if (!admin) {
+            console.log("Login falhou: admin não encontrado para o email:", email.toLowerCase().trim());
             return res.status(401).json({ message: "E-mail ou senha inválidos" });
         }
 
         const isPasswordValid = await bcrypt.compare(password, admin.passwordHash);
         if (!isPasswordValid) {
+            console.log("Login falhou: senha não bateu para o email:", admin.email);
             return res.status(401).json({ message: "E-mail ou senha inválidos" });
         }
 
