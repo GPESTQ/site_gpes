@@ -58,7 +58,7 @@ const PersonsPage = () => {
         <div className="flex flex-col bg-neutral-50 min-h-screen">
             <Navbar isOpen={isOpen} setIsOpen={setIsOpen} />
 
-            <main className="flex-1 pt-24.25 lg:pt-39.5">
+            <main className="flex-1">
                 <PageHeader
                     title="Pessoas"
                     subtitle="Conheça os pesquisadores, professores e alunos que fazem parte do GPES."

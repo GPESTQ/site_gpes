@@ -53,7 +53,7 @@ const PaperDetailsPage = () => {
         <div className="flex flex-col bg-neutral-50 min-h-screen">
             <Navbar isOpen={isOpen} setIsOpen={setIsOpen} />
 
-            <main className="flex-1 pt-24.25 lg:pt-39.5">
+            <main className="flex-1">
                 {isLoading && (
                     <PageHeader title="Título da Publicação" breadcrumb="Início / Publicações / Título da Publicação" />
                 )}
