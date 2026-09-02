@@ -12,7 +12,7 @@ const copyEmail = (email) => {
 };
 
 const PersonCard = ({ person }) => (
-    <div className="flex gap-6 pb-6 border-b border-neutral-900">
+    <div className="flex gap-6 pb-6 border-b border-neutral-950">
         <Image
             src={person.photoUrl || "/profile-image-placeholder.png"}
             alt={person.name}

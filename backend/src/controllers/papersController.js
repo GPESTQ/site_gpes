@@ -25,7 +25,7 @@ export async function getPaperById(req, res) {
             include: {
                 authors: {
                     orderBy: { order: "asc" },
-                    include: { person: { select: { id: true, name: true } } },
+                    include: { person: true },
                 },
             },
         });

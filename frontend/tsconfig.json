@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/admin/login/page.jsx", "app/layout.jsx", "app/admin/pessoas/page.jsx", "app/admin/pessoas/criar/page.jsx", "app/admin/pessoas/[id]/page.jsx"  ],
+, "app/admin/login/page.jsx", "app/layout.jsx", "app/admin/pessoas/page.jsx", "app/admin/pessoas/criar/page.jsx", "app/admin/pessoas/[id]/page.jsx", "app/(home)/page.jsx"  ],
   "exclude": ["node_modules"]
 }

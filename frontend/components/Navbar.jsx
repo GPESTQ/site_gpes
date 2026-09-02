@@ -27,7 +27,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
             </div>
             <div className={`flex flex-col lg:flex-row items-center justify-center gap-8 px-6 lg:px-20 py-6 lg:py-3 border-b border-neutral-500 lg:flex ${isOpen ? "flex" : "hidden"}`}>
                 <Link
-                    href="/pessoas"
+                    href="/publicacoes"
                     className="text-neutral-300 font-sans font-medium text-sm hover:text-neutral-50 transition-all duration-300 ease-in-out"
                 >
                     PUBLICAÇÕES

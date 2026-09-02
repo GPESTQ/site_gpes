@@ -6,11 +6,12 @@ const storage = new CloudinaryStorage({
     cloudinary,
     params: (_, file) => {
         const isPdf = file.mimetype === "application/pdf";
+        const uniqueId = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
 
         return {
             folder: isPdf ? "gpes/papers" : "gpes/images",
             resource_type: isPdf ? "raw" : "image",
-            public_id: `${Date.now()}-${Math.round(Math.random() * 1e9)}`,
+            public_id: isPdf ? `${uniqueId}.pdf` : uniqueId,
         };
     },
 });
