@@ -6,9 +6,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange, items, itemsPerPage
 
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
+    const startItem = (currentPage - 1) * itemsPerPage + 1;
+    const endItem = Math.min(currentPage * itemsPerPage, items);
+
     return (
         <div className="flex items-center justify-between gap-2">
-            <span className="font-sans text-sm text-shadow-neutral-950">{currentPage === totalPages ? items % itemsPerPage : itemsPerPage} de {items} resultados</span>
+            <span className="font-sans text-sm text-shadow-neutral-950">{startItem}–{endItem} de {items} resultados</span>
             <div className="flex items-center gap-2">
                 <button
                     onClick={() => onPageChange(currentPage - 1)}
@@ -22,7 +25,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, items, itemsPerPage
                     <button
                         key={page}
                         onClick={() => onPageChange(page)}
-                        className={`size-8 flex items-center justify-center rounded-lg text-sm font-sans cursor-pointer ${
+                        className={`size-8 items-center justify-center rounded-lg text-sm font-sans cursor-pointer hidden sm:flex ${
                             page === currentPage
                                 ? "bg-primary-700 text-neutral-50"
                                 : "text-neutral-950 hover:bg-neutral-200"
