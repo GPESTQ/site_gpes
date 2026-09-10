@@ -1,7 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { CircleNotchIcon, PlusIcon } from "@phosphor-icons/react";
 
 import AdminNavbar from "@/components/admin/AdminNavbar";
@@ -10,84 +8,49 @@ import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import InputField from "@/components/admin/InputField";
 import Select from "@/components/admin/Select";
 import FileInput from "@/components/admin/FileInput";
-import AuthorMultiSelect from "@/components/admin/AuthorMultiSelect";
+import PersonMultiSelect from "@/components/admin/PersonMultiSelect";
 import Button from "@/components/ui/Button";
 import AdminFooter from "@/components/admin/AdminFooter";
-import api from "@/lib/axios";
 import usePersons from "@/hooks/usePersons";
+import useCreatePaper from "../hooks/useCreatePaper";
 
 const CreatePaperPage = () => {
-    const [title, setTitle] = useState("");
-    const [abstract, setAbstract] = useState("");
-    const [publishedAt, setPublishedAt] = useState("");
-    const [type, setType] = useState("");
-    const [eventJournal, setEventJournal] = useState("");
-    const [keywords, setKeywords] = useState("");
-    const [doi, setDoi] = useState("");
-    const [pdfFile, setPdfFile] = useState(null);
-    const [authorIds, setAuthorIds] = useState([]);
-    const [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const {
+        title,
+        setTitle,
+        abstract,
+        setAbstract,
+        publishedAt,
+        setPublishedAt,
+        type,
+        setType,
+        eventJournal,
+        setEventJournal,
+        keywords,
+        setKeywords,
+        doi,
+        setDoi,
+        setPdfFile,
+        authorIds,
+        setAuthorIds,
+        isLoading,
+        handleSubmit,
+    } = useCreatePaper();
 
-    const router = useRouter();
-    const redirectTo = "/admin/publicacoes";
-
-    const { filteredPersons: persons } = usePersons();
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!title.trim() || !abstract.trim() || !eventJournal.trim() || !keywords.trim() || !doi.trim() || !type.trim() || !publishedAt || authorIds.length === 0) {
-            toast.error("Preencha todos os campos obrigatórios, incluindo ao menos um autor");
-            return;
-        }
-
-        setIsLoading(true);
-        try {
-            let pdfUrl = null;
-
-            if (pdfFile) {
-                const formData = new FormData();
-                formData.append("pdf", pdfFile);
-                const uploadRes = await api.post("/upload/pdf", formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
-                pdfUrl = uploadRes.data.imageUrl;
-            }
-
-            await api.post("/papers", {
-                title: title.trim(),
-                abstract: abstract.trim(),
-                publishedAt,
-                type,
-                eventJournal: eventJournal.trim(),
-                keywords: keywords.trim(),
-                doi: doi.trim(),
-                pdfUrl,
-                authorIds,
-            });
-
-            toast.success("Publicação adicionada com sucesso!");
-            router.push(redirectTo);
-        } catch (error) {
-            console.error("Failed to create paper", error);
-            toast.error("Erro ao adicionar publicação");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const { persons } = usePersons();
+    const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
     return (
         <div className="min-h-screen bg-neutral-50 flex flex-col">
-            <AdminNavbar setIsOpen={setIsOpen} />
-            <AdminSidebar isOpen={isOpen} actived={"papers"} />
+            <AdminNavbar setIsOpen={setIsNavbarOpen} />
+            <AdminSidebar isOpen={isNavbarOpen} actived={"papers"} />
 
             <main className="pt-20 lg:pl-60 flex-1">
                 <AdminPageHeader
                     breadcrumb="Painel de Controle / Publicações / Adicionar Publicação"
                     title="Adicionar Publicação"
                     subtitle="Preencha os dados abaixo para cadastrar uma nova publicação científica."
-                    backLink="/admin/papers"
+                    backLink="/admin/publicacoes"
                 />
 
                 <div className="max-w-2xl px-4 lg:px-6">
@@ -153,7 +116,7 @@ const CreatePaperPage = () => {
                             onChange={(e) => setEventJournal(e.target.value)}
                         />
 
-                        <AuthorMultiSelect
+                        <PersonMultiSelect
                             label="Autores *"
                             options={persons.map((p) => ({ id: p.id, name: p.name }))}
                             selected={authorIds}
@@ -190,7 +153,11 @@ const CreatePaperPage = () => {
 
                         <Button type="submit" isLoading={isLoading} className="justify-self-end mt-2">
                             <PlusIcon size={24} />
-                            {isLoading ? <CircleNotchIcon size={24} className="animate-spin" /> : "ADICIONAR PUBLICAÇÃO"}
+                            {isLoading ? (
+                                <CircleNotchIcon size={24} className="animate-spin" />
+                            ) : (
+                                "ADICIONAR PUBLICAÇÃO"
+                            )}
                         </Button>
                     </form>
                 </div>

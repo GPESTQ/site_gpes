@@ -2,11 +2,12 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import path from "path";
 
 import uploadRoutes from "./routes/uploadRoutes.js";
 import personsRoutes from "./routes/personsRoutes.js";
 import papersRoutes from "./routes/papersRoutes.js";
+import projectsRoutes from "./routes/projectsRoutes.js";
+import partnersRoutes from "./routes/partnersRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { connectDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
@@ -29,6 +30,8 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/persons", personsRoutes);
 app.use("/api/papers", papersRoutes);
+app.use("/api/projects", projectsRoutes);
+app.use("/api/partners", partnersRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Rota não encontrada na API" });

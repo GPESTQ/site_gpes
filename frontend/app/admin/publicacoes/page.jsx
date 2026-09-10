@@ -1,7 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PlusIcon } from "@phosphor-icons/react";
-import toast from "react-hot-toast";
 
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import AdminSidebar from "@/components/admin/AdminSidebar";
@@ -19,58 +18,29 @@ import {
 } from "@/components/admin/AdminTable";
 import LoadingCard from "@/components/LoadingCard";
 import ItemsNotFoundCard from "@/components/ItemsNotFoundCard";
-import api from "@/lib/axios";
 import SearchInput from "@/components/ui/SearchInput";
 import usePagination from "@/hooks/usePagination";
 import Pagination from "@/components/Pagination";
 import { formatDate } from "../../../lib/utils";
+import usePapers from "@/hooks/usePapers";
+import useDeletePaper from "./hooks/useDeletePaper";
 
 const AdminPapersPage = () => {
-    const [isRateLimit, setIsRateLimit] = useState(false);
-    const [papers, setPapers] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { papers, setPapers, isRateLimited, isLoading } = usePapers();
+    const { deletePaper } = useDeletePaper((deletedId) => {
+        setPapers((prev) => prev.filter((paper) => paper.id !== deletedId));
+    });
+
     const [search, setSearch] = useState("");
-    const [isOpen, setIsOpen] = useState(false);
+    const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
     const searchedPapers = papers.filter((paper) => paper.title.toLowerCase().includes(search.toLowerCase()));
     const { paginatedItems, currentPage, totalPages, setCurrentPage, itemsPerPage } = usePagination(searchedPapers, 8);
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("Tem certeza que deseja remover essa publicação?")) return;
-        try {
-            await api.delete(`/papers/${id}`);
-            setPapers((prev) => prev.filter((paper) => paper.id !== id));
-            toast.success("Pessoa removida com sucesso!");
-        } catch (error) {
-            console.error("Failed to delete paper", error);
-            toast.error("Erro ao remover publicação");
-        }
-    };
-
-    useEffect(() => {
-        const fetchPapers = async () => {
-            try {
-                const res = await api.get("/papers");
-                setPapers(res.data);
-                setIsRateLimit(false);
-            } catch (error) {
-                console.error("Failed to fetch papers", error);
-                if (error.response?.status === 429) {
-                    setIsRateLimit(true);
-                } else {
-                    toast.error("Erro ao carregar as publicações");
-                }
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchPapers();
-    }, []);
-
     return (
         <div className="min-h-screen bg-neutral-50 flex flex-col">
-            <AdminNavbar setIsOpen={setIsOpen} />
-            <AdminSidebar isOpen={isOpen} actived={"papers"} />
+            <AdminNavbar setIsOpen={setIsNavbarOpen} />
+            <AdminSidebar isOpen={isNavbarOpen} actived={"papers"} />
 
             <main className="pt-22 lg:pt-20 lg:pl-60 flex-1">
                 <AdminPageHeader
@@ -91,7 +61,7 @@ const AdminPapersPage = () => {
                 <div className="p-4 lg:p-6">
                     {isLoading && <LoadingCard text="Carregando publicações..." />}
 
-                    {searchedPapers.length === 0 && !isRateLimit && !isLoading && <ItemsNotFoundCard />}
+                    {searchedPapers.length === 0 && !isRateLimited && !isLoading && <ItemsNotFoundCard />}
 
                     {searchedPapers.length > 0 && (
                         <div className="flex flex-col gap-6">
@@ -112,7 +82,7 @@ const AdminPapersPage = () => {
                                             <AdminTableCell>{formatDate(paper.publishedAt)}</AdminTableCell>
                                             <AdminTableActions
                                                 editHref={`/admin/publicacoes/${paper.id}`}
-                                                onDelete={() => handleDelete(paper.id)}
+                                                onDelete={() => deletePaper(paper.id)}
                                             />
                                         </AdminTableRow>
                                     ))}

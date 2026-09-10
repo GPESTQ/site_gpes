@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enumerador do cargo da pessoa
 enum PersonRole {
   coordinator
   professor
@@ -15,6 +16,7 @@ enum PersonRole {
   collaborator
 }
 
+// Enumerador da descrição da pessoa
 enum PersonOccupation {
   researcher
   frontend_developer
@@ -24,6 +26,7 @@ enum PersonOccupation {
   designer
 }
 
+// Entidade pessoa
 model Person {
   id         String           @id @default(cuid())
   name       String
@@ -34,10 +37,12 @@ model Person {
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
   papers PaperAuthor[]
+  projects ProjectMember[]
 
   @@map("persons")
 }
 
+// Entidade admin (usuário que loga no painel administrativo)
 model Admin {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -47,6 +52,7 @@ model Admin {
   @@map("admins")
 }
 
+// Entidade publicação
 model Paper {
   id            String        @id @default(cuid())
   title         String
@@ -64,6 +70,7 @@ model Paper {
   @@map("papers")
 }
 
+// Entidade publicação_autor
 model PaperAuthor {
   id       String @id @default(cuid())
   paper    Paper  @relation(fields: [paperId], references: [id], onDelete: Cascade)
@@ -76,7 +83,71 @@ model PaperAuthor {
   @@map("paper_authors")
 }
 
+// Enumerador do tipo de publicação
 enum PaperType {
   article
   proceedings
+}
+
+// Entidade projeto
+model Project {
+  id          String          @id @default(cuid())
+  title       String
+  description String
+  methodology String?
+  status      ProjectType
+  client      String?
+  partnerId   String?
+  partner     Partner?        @relation(fields: [partnerId], references: [id])
+  startedDate DateTime
+  endedDate   DateTime?
+  members     ProjectMember[]
+  images      ProjectImage[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@map("projects")
+}
+
+// Entidade projeto_pessoa
+model ProjectMember {
+  id        String  @id @default(cuid())
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  person    Person  @relation(fields: [personId], references: [id])
+  personId  String
+  order     Int
+
+  @@unique([projectId, personId])
+  @@map("project_members")
+}
+
+// Enumerador do status do projeto
+enum ProjectType {
+  inProcess
+  completed
+}
+
+// Entidade projeto_imagem
+model ProjectImage {
+  id        String  @id @default(cuid())
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  url       String
+  order     Int
+
+  @@map("project_images")
+}
+
+// Entidade apoaidor
+model Partner {
+  id        String    @id @default(cuid())
+  tradeName String
+  logoUrl   String?
+  siteUrl   String?
+  projects  Project[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("partners")
 }

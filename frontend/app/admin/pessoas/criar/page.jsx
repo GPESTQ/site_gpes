@@ -1,8 +1,7 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { CircleNotchIcon, PlusIcon } from "@phosphor-icons/react";
+import Image from "next/image";
 
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import AdminSidebar from "@/components/admin/AdminSidebar";
@@ -12,71 +11,28 @@ import Select from "@/components/admin/Select";
 import FileInput from "@/components/admin/FileInput";
 import Button from "@/components/ui/Button";
 import AdminFooter from "@/components/admin/AdminFooter";
-import api from "@/lib/axios";
-import Image from "next/image";
+import useCreatePerson from "../hooks/useCreatePerson";
 
-const CreatePersonsPage = () => {
-    const [name, setName] = useState("");
-    const [role, setRole] = useState("");
-    const [occupation, setOccupation] = useState("");
-    const [lattesURL, setLattesURL] = useState("");
-    const [linkedinURL, setLinkedinURL] = useState("");
-    const [email, setEmail] = useState("");
-    const [profilePicture, setProfilePicture] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [currentPhotoUrl, setCurrentPhotoUrl] = useState(null);
+const CreatePersonPage = () => {
+    const {
+        name, setName,
+        role, setRole,
+        occupation, setOccupation,
+        lattesURL, setLattesURL,
+        linkedinURL, setLinkedinURL,
+        email, setEmail,
+        profilePicture,
+        setProfilePicture,
+        isLoading,
+        handleSubmit,
+    } = useCreatePerson();
 
-    const router = useRouter();
-    const redirectTo = "/admin/pessoas";
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!name.trim() || !role.trim() || !occupation.trim()) {
-            toast.error("Preencha todas os campos obrigatórios");
-            return;
-        }
-
-        setIsLoading(true);
-        try {
-            let photoUrl = null;
-
-            if (profilePicture) {
-                const formData = new FormData();
-                formData.append("photo", profilePicture);
-                const uploadRes = await api.post("/upload/photo", formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
-                photoUrl = uploadRes.data.imageUrl;
-            }
-
-            await api.post("/persons", {
-                name: name.trim(),
-                role,
-                occupation,
-                links: {
-                    lattes: lattesURL.trim(),
-                    linkedin: linkedinURL.trim(),
-                    email: email.trim(),
-                },
-                photoUrl,
-            });
-
-            toast.success("Pessoa adicionada com sucesso!");
-            router.push(redirectTo);
-        } catch (error) {
-            console.error("Failed to create person", error);
-            toast.error("Erro ao adicionar pessoa");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
     return (
         <div className="min-h-screen bg-neutral-50 flex flex-col">
-            <AdminNavbar setIsOpen={setIsOpen} />
-            <AdminSidebar isOpen={isOpen} actived={"persons"} />
+            <AdminNavbar setIsOpen={setIsNavbarOpen} />
+            <AdminSidebar isOpen={isNavbarOpen} actived={"persons"} />
 
             <main className="pt-20 lg:pl-60 flex-1">
                 <AdminPageHeader
@@ -92,7 +48,7 @@ const CreatePersonsPage = () => {
                             src={
                                 profilePicture
                                     ? URL.createObjectURL(profilePicture)
-                                    : currentPhotoUrl || "/profile-image-placeholder.png"
+                                    : "/profile-image-placeholder.png"
                             }
                             alt={name || "Foto de perfil"}
                             width={240}
@@ -198,4 +154,4 @@ const CreatePersonsPage = () => {
         </div>
     );
 };
-export default CreatePersonsPage;
+export default CreatePersonPage;

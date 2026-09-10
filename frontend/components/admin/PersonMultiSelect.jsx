@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { CaretDownIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 
-const AuthorMultiSelect = ({ label, options, selected, onChange, disabled }) => {
+const PersonMultiSelect = ({ label, options, selected, onChange, disabled }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState("");
     const containerRef = useRef(null);
@@ -54,7 +54,7 @@ const AuthorMultiSelect = ({ label, options, selected, onChange, disabled }) => 
                             ? "Selecione os autores"
                             : `${selected.length} autor${selected.length > 1 ? "es" : ""} selecionado${selected.length > 1 ? "s" : ""}`}
                     </span>
-                    <CaretDownIcon size={24} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                    <CaretDownIcon size={24} className={`text-neutral-600`} />
                 </button>
 
                 {isOpen && (
@@ -115,4 +115,4 @@ const AuthorMultiSelect = ({ label, options, selected, onChange, disabled }) => 
         </div>
     );
 };
-export default AuthorMultiSelect;
+export default PersonMultiSelect;

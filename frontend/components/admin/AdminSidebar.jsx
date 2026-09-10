@@ -55,7 +55,7 @@ const AdminSidebar = ({ isOpen, actived }) => {
                     </li>
                     <li>
                         <Link
-                            href="/admin/pessoas"
+                            href="/admin/projetos"
                             className={`flex items-center gap-3 px-4 py-2 font-medium rounded-lg transition-all duration-300 ease-in-out ${actived == "projects" ? "bg-primary-700 text-neutral-50" : "text-neutral-300 hover:bg-neutral-900 hover:text-neutral-50"}`}
                         >
                             <span className="flex items-center justify-center size-8">
@@ -77,8 +77,8 @@ const AdminSidebar = ({ isOpen, actived }) => {
                     </li>
                     <li>
                         <Link
-                            href="/admin/pessoas"
-                            className={`flex items-center gap-3 px-4 py-2 font-medium rounded-lg transition-all duration-300 ease-in-out ${actived == "affiliates" ? "bg-primary-700 text-neutral-50" : "text-neutral-300 hover:bg-neutral-900 hover:text-neutral-50"}`}
+                            href="/admin/apoiadores"
+                            className={`flex items-center gap-3 px-4 py-2 font-medium rounded-lg transition-all duration-300 ease-in-out ${actived == "partners" ? "bg-primary-700 text-neutral-50" : "text-neutral-300 hover:bg-neutral-900 hover:text-neutral-50"}`}
                         >
                             <span className="flex items-center justify-center size-8">
                                 <HandshakeIcon size={24} />

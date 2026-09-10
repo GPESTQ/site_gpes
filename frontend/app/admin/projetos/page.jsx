@@ -18,71 +18,70 @@ import {
 } from "@/components/admin/AdminTable";
 import LoadingCard from "@/components/LoadingCard";
 import ItemsNotFoundCard from "@/components/ItemsNotFoundCard";
-import { roleLabel, occupationLabel } from "@/lib/personOptions";
 import SearchInput from "@/components/ui/SearchInput";
 import usePagination from "@/hooks/usePagination";
 import Pagination from "@/components/Pagination";
-import usePersons from "@/hooks/usePersons";
-import useDeletePerson from "./hooks/useDeletePerson";
+import useProjects from "@/hooks/useProjects";
+import useDeleteProject from "./hooks/useDeleteProject";
 
-const AdminPersonsPage = () => {
-    const { persons, setPersons, isRateLimited, isLoading } = usePersons();
-    const { deletePerson } = useDeletePerson((deletedId) => {
-        setPersons((prev) => prev.filter((person) => person.id !== deletedId));
+const AdminProjectsPage = () => {
+    const { projects, setProjects, isRateLimited, isLoading } = useProjects();
+    const { deleteProject } = useDeleteProject((deletedId) => {
+        setProjects((prev) => prev.filter((project) => project.id !== deletedId));
     });
 
     const [search, setSearch] = useState("");
     const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
-    const searchedPersons = persons.filter((person) => person.name.toLowerCase().includes(search.toLowerCase()));
-    const { paginatedItems, currentPage, totalPages, setCurrentPage, itemsPerPage } = usePagination(searchedPersons, 8);
+    const searchedProjects = projects.filter((project) => project.title.toLowerCase().includes(search.toLowerCase()));
+    const { paginatedItems, currentPage, totalPages, setCurrentPage, itemsPerPage } = usePagination(searchedProjects, 8);
 
     return (
         <div className="min-h-screen bg-neutral-50 flex flex-col">
             <AdminNavbar setIsOpen={setIsNavbarOpen} />
-            <AdminSidebar isOpen={isNavbarOpen} actived={"persons"} />
+            <AdminSidebar isOpen={isNavbarOpen} actived={"projects"} />
 
             <main className="pt-22 lg:pt-20 lg:pl-60 flex-1">
                 <AdminPageHeader
-                    breadcrumb="Painel de Controle / Pessoas"
-                    title="Pessoas"
-                    subtitle="Gerencie as pessoas adicionadas ao sistema."
+                    breadcrumb="Painel de Controle / Projetos"
+                    title="Projetos"
+                    subtitle="Gerencie os projetos adicionados ao sistema."
                 />
 
                 <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row lg:items-center lg:justify-between px-4 lg:px-6">
-                    <SearchInput value={search} onChange={setSearch} placeholder="Buscar por nome..." />
+                    <SearchInput value={search} onChange={setSearch} placeholder="Buscar por título..." />
 
-                    <LinkButton href="/admin/pessoas/criar">
+                    <LinkButton href="/admin/projetos/criar">
                         <PlusIcon size={24} />
-                        ADICIONAR PESSOA
+                        ADICIONAR PROJETO
                     </LinkButton>
                 </div>
 
                 <div className="p-4 lg:p-6">
-                    {isLoading && <LoadingCard text="Carregando pessoas..." />}
+                    {isLoading && <LoadingCard text="Carregando projetos..." />}
 
-                    {searchedPersons.length === 0 && !isRateLimited && !isLoading && <ItemsNotFoundCard />}
+                    {searchedProjects.length === 0 && !isRateLimited && !isLoading && <ItemsNotFoundCard />}
 
-                    {searchedPersons.length > 0 && (
+                    {searchedProjects.length > 0 && (
                         <div className="flex flex-col gap-6">
                             <AdminTable>
                                 <AdminTableHead>
                                     <AdminTableHeader className="text-center">#</AdminTableHeader>
-                                    <AdminTableHeader className="w-4/12">Nome</AdminTableHeader>
-                                    <AdminTableHeader className="w-3/12">Cargo</AdminTableHeader>
-                                    <AdminTableHeader className="w-3/12">Ocupação</AdminTableHeader>
+                                    <AdminTableHeader className="w-4/12">Título</AdminTableHeader>
+                                    <AdminTableHeader className="w-3/12">Metodologia</AdminTableHeader>
+                                    <AdminTableHeader className="w-3/12">Cliente</AdminTableHeader>
                                     <AdminTableHeader className="text-center">Opções</AdminTableHeader>
                                 </AdminTableHead>
                                 <AdminTableBody>
-                                    {paginatedItems.map((person, index) => (
-                                        <AdminTableRow key={person.id}>
+                                    {paginatedItems.map((project, index) => (
+                                        <AdminTableRow key={project.id}>
                                             <AdminTableCell className="text-center">{index + 1}</AdminTableCell>
-                                            <AdminTableCell>{person.name}</AdminTableCell>
-                                            <AdminTableCell>{roleLabel[person.role]}</AdminTableCell>
-                                            <AdminTableCell>{occupationLabel[person.occupation]}</AdminTableCell>
+                                            <AdminTableCell>{project.title}</AdminTableCell>
+                                            <AdminTableCell>{project.methodology || "-"}</AdminTableCell>
+                                            <AdminTableCell>{project.client || "-"}</AdminTableCell>
                                             <AdminTableActions
-                                                editHref={`/admin/pessoas/${person.id}`}
-                                                onDelete={() => deletePerson(person.id)}
+                                                editHref={`/admin/projetos/${project.id}`}
+                                                onDelete={() => deleteProject(project.id)}
                                             />
                                         </AdminTableRow>
                                     ))}
@@ -93,7 +92,7 @@ const AdminPersonsPage = () => {
                                 currentPage={currentPage}
                                 totalPages={totalPages}
                                 onPageChange={setCurrentPage}
-                                totalItems={searchedPersons.length}
+                                items={searchedProjects.length}
                                 itemsPerPage={itemsPerPage}
                             />
                         </div>
@@ -105,5 +104,4 @@ const AdminPersonsPage = () => {
         </div>
     );
 };
-
-export default AdminPersonsPage;
+export default AdminProjectsPage;

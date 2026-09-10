@@ -1,8 +1,6 @@
 "use client";
-import { useRouter, useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import toast from "react-hot-toast";
 import { CircleNotchIcon, FloppyDiskIcon } from "@phosphor-icons/react";
 
 import AdminNavbar from "@/components/admin/AdminNavbar";
@@ -14,98 +12,30 @@ import FileInput from "@/components/admin/FileInput";
 import Button from "@/components/ui/Button";
 import AdminFooter from "@/components/admin/AdminFooter";
 import LoadingCard from "@/components/LoadingCard";
-import api from "@/lib/axios";
+import useEditPerson from "../hooks/useEditPerson"
 
 const EditPersonPage = () => {
-    const { id } = useParams();
-    const router = useRouter();
-    const redirectTo = "/admin/pessoas";
+    const {
+        name, setName,
+        role, setRole,
+        occupation, setOccupation,
+        lattesURL, setLattesURL,
+        linkedinURL, setLinkedinURL,
+        email, setEmail,
+        profilePicture,
+        setProfilePicture,
+        currentPhotoUrl,
+        isLoading,
+        isFetching,
+        handleSubmit,
+    } = useEditPerson();
 
-    const [name, setName] = useState("");
-    const [role, setRole] = useState("");
-    const [occupation, setOccupation] = useState("");
-    const [lattesURL, setLattesURL] = useState("");
-    const [linkedinURL, setLinkedinURL] = useState("");
-    const [email, setEmail] = useState("");
-    const [profilePicture, setProfilePicture] = useState(null);
-    const [currentPhotoUrl, setCurrentPhotoUrl] = useState(null);
-
-    const [isOpen, setIsOpen] = useState(false);
-    const [isFetching, setIsFetching] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        const fetchPerson = async () => {
-            try {
-                const res = await api.get(`/persons/${id}`);
-                const person = res.data;
-
-                setName(person.name || "");
-                setRole(person.role || "");
-                setOccupation(person.occupation || "");
-                setLattesURL(person.links?.lattes || "");
-                setLinkedinURL(person.links?.linkedin || "");
-                setEmail(person.links?.email || "");
-                setCurrentPhotoUrl(person.photoUrl || null);
-            } catch (error) {
-                console.error("Failed to fetch person", error);
-                toast.error("Erro ao carregar os dados da pessoa");
-                router.push(redirectTo);
-            } finally {
-                setIsFetching(false);
-            }
-        };
-
-        fetchPerson();
-    }, [id, router]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!name.trim() || !role.trim() || !occupation.trim()) {
-            toast.error("Preencha todos os campos obrigatórios");
-            return;
-        }
-
-        setIsLoading(true);
-        try {
-            let photoUrl = currentPhotoUrl;
-
-            if (profilePicture) {
-                const formData = new FormData();
-                formData.append("photo", profilePicture);
-                const uploadRes = await api.post("/upload/photo", formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
-                photoUrl = uploadRes.data.imageUrl;
-            }
-
-            await api.put(`/persons/${id}`, {
-                name: name.trim(),
-                role,
-                occupation,
-                links: {
-                    lattes: lattesURL.trim(),
-                    linkedin: linkedinURL.trim(),
-                    email: email.trim(),
-                },
-                photoUrl,
-            });
-
-            toast.success("Pessoa atualizada com sucesso!");
-            router.push(redirectTo);
-        } catch (error) {
-            console.error("Failed to update person", error);
-            toast.error("Erro ao atualizar pessoa");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
     return (
         <div className="min-h-screen bg-neutral-50 flex flex-col">
-            <AdminNavbar setIsOpen={setIsOpen} />
-            <AdminSidebar isOpen={isOpen} actived={"persons"} />
+            <AdminNavbar setIsOpen={setIsNavbarOpen} />
+            <AdminSidebar isOpen={isNavbarOpen} actived={"persons"} />
 
             <main className="pt-20 lg:pl-60 flex-1">
                 <AdminPageHeader

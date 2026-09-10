@@ -1,7 +1,5 @@
 "use client";
-import { useRouter, useParams } from "next/navigation";
-import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
+import { useState } from "react";
 import { CircleNotchIcon, FloppyDiskIcon } from "@phosphor-icons/react";
 
 import AdminNavbar from "@/components/admin/AdminNavbar";
@@ -10,124 +8,44 @@ import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import InputField from "@/components/admin/InputField";
 import Select from "@/components/admin/Select";
 import FileInput from "@/components/admin/FileInput";
-import AuthorMultiSelect from "@/components/admin/AuthorMultiSelect";
+import PersonMultiSelect from "@/components/admin/PersonMultiSelect";
 import Button from "@/components/ui/Button";
 import AdminFooter from "@/components/admin/AdminFooter";
 import LoadingCard from "@/components/LoadingCard";
-import api from "@/lib/axios";
 import usePersons from "@/hooks/usePersons";
+import useEditPaper from "../hooks/useEditPaper";
 
 const EditPaperPage = () => {
-    const { id } = useParams();
-    const router = useRouter();
-    const redirectTo = "/admin/publicacoes";
+    const {
+        title,
+        setTitle,
+        abstract,
+        setAbstract,
+        publishedAt,
+        setPublishedAt,
+        type,
+        setType,
+        eventJournal,
+        setEventJournal,
+        keywords,
+        setKeywords,
+        doi,
+        setDoi,
+        setPdfFile,
+        authorIds,
+        setAuthorIds,
+        isFetching,
+        isLoading,
+        handleSubmit,
+    } = useEditPaper();
 
-    const [title, setTitle] = useState("");
-    const [abstract, setAbstract] = useState("");
-    const [publishedAt, setPublishedAt] = useState("");
-    const [type, setType] = useState("");
-    const [eventJournal, setEventJournal] = useState("");
-    const [keywords, setKeywords] = useState("");
-    const [doi, setDoi] = useState("");
-    const [pdfFile, setPdfFile] = useState(null);
-    const [currentPdfUrl, setCurrentPdfUrl] = useState(null);
-    const [authorIds, setAuthorIds] = useState([]);
-
-    const [isOpen, setIsOpen] = useState(false);
-    const [isFetching, setIsFetching] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const { filteredPersons: persons } = usePersons();
-
-    useEffect(() => {
-        const fetchPaper = async () => {
-            try {
-                const res = await api.get(`/papers/${id}`);
-                const paper = res.data;
-
-                setTitle(paper.title || "");
-                setAbstract(paper.abstract || "");
-                setPublishedAt(paper.publishedAt ? paper.publishedAt.slice(0, 10) : "");
-                setType(paper.type || "");
-                setEventJournal(paper.eventJournal || "");
-                setKeywords(paper.keywords || "");
-                setDoi(paper.doi || "");
-                setCurrentPdfUrl(paper.pdfUrl || null);
-                setAuthorIds(
-                    [...(paper.authors || [])]
-                        .sort((a, b) => a.order - b.order)
-                        .map((author) => author.personId)
-                );
-                console.log("paper.authors (bruto):", paper.authors);
-                console.log("authorIds calculado:", authorIds);
-            } catch (error) {
-                console.error("Failed to fetch paper", error);
-                toast.error("Erro ao carregar os dados da publicação");
-                router.push(redirectTo);
-            } finally {
-                setIsFetching(false);
-            }
-        };
-
-        fetchPaper();
-    }, [id, router]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (
-            !title.trim() ||
-            !abstract.trim() ||
-            !eventJournal.trim() ||
-            !keywords.trim() ||
-            !doi.trim() ||
-            !type.trim() ||
-            !publishedAt ||
-            authorIds.length === 0
-        ) {
-            toast.error("Preencha todos os campos obrigatórios, incluindo ao menos um autor");
-            return;
-        }
-
-        setIsLoading(true);
-        try {
-            let pdfUrl = currentPdfUrl;
-
-            if (pdfFile) {
-                const formData = new FormData();
-                formData.append("pdf", pdfFile);
-                const uploadRes = await api.post("/upload/pdf", formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
-                pdfUrl = uploadRes.data.imageUrl;
-            }
-
-            await api.put(`/papers/${id}`, {
-                title: title.trim(),
-                abstract: abstract.trim(),
-                publishedAt,
-                type,
-                eventJournal: eventJournal.trim(),
-                keywords: keywords.trim(),
-                doi: doi.trim(),
-                pdfUrl,
-                authorIds,
-            });
-
-            toast.success("Publicação atualizada com sucesso!");
-            router.push(redirectTo);
-        } catch (error) {
-            console.error("Failed to update paper", error);
-            toast.error("Erro ao atualizar publicação");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const { persons } = usePersons();
+    const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
     return (
         <div className="min-h-screen bg-neutral-50 flex flex-col">
-            <AdminNavbar setIsOpen={setIsOpen} />
-            <AdminSidebar isOpen={isOpen} actived={"papers"} />
+            <AdminNavbar setIsOpen={setIsNavbarOpen} />
+            <AdminSidebar isOpen={isNavbarOpen} actived={"papers"} />
 
             <main className="pt-20 lg:pl-60 flex-1">
                 <AdminPageHeader
@@ -137,11 +55,11 @@ const EditPaperPage = () => {
                     backLink="/admin/publicacoes"
                 />
 
-                <div className="max-w-2xl px-4 lg:px-6">
+                <div className="px-4 lg:px-6">
                     {isFetching && <LoadingCard text="Carregando dados da publicação..." />}
 
                     {!isFetching && persons.length > 0 && (
-                        <form onSubmit={handleSubmit} className="grid gap-y-4">
+                        <form onSubmit={handleSubmit} className="max-w-2xl grid gap-y-4">
                             <InputField
                                 id="title"
                                 label="Título *"
@@ -203,7 +121,7 @@ const EditPaperPage = () => {
                                 onChange={(e) => setEventJournal(e.target.value)}
                             />
 
-                            <AuthorMultiSelect
+                            <PersonMultiSelect
                                 label="Autores *"
                                 options={persons.map((p) => ({ id: p.id, name: p.name }))}
                                 selected={authorIds}

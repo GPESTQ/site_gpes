@@ -3,32 +3,32 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../lib/axios";
 
-const usePersons = () => {
+const usePartners = () => {
     const [isRateLimited, setIsRateLimited] = useState(false);
-    const [persons, setPersons] = useState([]);
+    const [partners, setPartners] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchPersons = async () => {
+        const fetchPartners = async () => {
             try {
-                const res = await api.get("/persons");
-                setPersons(res.data);
+                const res = await api.get("/partners");
+                setPartners(res.data);
                 setIsRateLimited(false);
             } catch (error) {
-                console.error("Failed to fetch persons", error);
+                console.error("Failed to fetch partners", error);
                 if (error.response?.status === 429) {
                     setIsRateLimited(true);
                 } else {
-                    toast.error("Erro ao carregar as pessoas");
+                    toast.error("Erro ao carregar os apoiadores");
                 }
             } finally {
                 setIsLoading(false);
             }
         };
-        fetchPersons();
+        fetchPartners();
     }, []);
 
-    return { persons, setPersons, isRateLimited, isLoading };
+    return { partners, setPartners, isRateLimited, isLoading };
 };
 
-export default usePersons;
+export default usePartners;
