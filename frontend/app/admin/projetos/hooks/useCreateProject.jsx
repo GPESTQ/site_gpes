@@ -12,8 +12,9 @@ const useCreateProject = () => {
     const [status, setStatus] = useState("");
     const [client, setClient] = useState("");
     const [partnerId, setPartnerId] = useState("");
-    const [startedDate, setStartedDate] = useState("");
-    const [endedDate, setEndedDate] = useState("");
+    const [startedYear, setStartedYear] = useState("");
+    const [endedYear, setEndedYear] = useState("");
+    const [url, setUrl] = useState("");
     const [memberIds, setMemberIds] = useState([]);
     const [imageFiles, setImageFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +25,7 @@ const useCreateProject = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!title.trim() || !description.trim() || !status.trim() || !startedDate || memberIds.length == 0) {
+        if (!title.trim() || !description.trim() || !status.trim() || !startedYear || memberIds.length == 0) {
             toast.error("Preencha todos os campos obrigatórios, incluindo ao menos um membro da equipe");
             return;
         }
@@ -49,8 +50,9 @@ const useCreateProject = () => {
                 status,
                 client: client.trim(),
                 partnerId: partnerId || null,
-                startedDate,
-                endedDate: endedDate || null,
+                startedYear: Number(startedYear),
+                endedYear: endedYear ? Number(endedYear) : null,
+                url,
                 memberIds,
                 imageUrls,
             });
@@ -78,10 +80,12 @@ const useCreateProject = () => {
         setClient,
         partnerId,
         setPartnerId,
-        startedDate,
-        setStartedDate,
-        endedDate,
-        setEndedDate,
+        startedYear,
+        setStartedYear,
+        endedYear,
+        setEndedYear,
+        url,
+        setUrl,
         memberIds,
         setMemberIds,
         imageFiles,

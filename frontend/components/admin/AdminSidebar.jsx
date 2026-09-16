@@ -31,7 +31,7 @@ const AdminSidebar = ({ isOpen, actived }) => {
         <aside className={`h-[calc(100vh-5rem)] w-60 z-10 lg:block ${isOpen ? "block" : "hidden"} fixed top-20`}>
             <nav className="h-full bg-neutral-950 flex flex-col px-6 py-6">
                 <ul className="flex flex-col text-sm font-sans font-medium h-full">
-                    <li>
+                    {/* <li>
                         <Link
                             href="/admin/pessoas"
                             className={`flex items-center gap-3 px-4 py-2 font-medium rounded-lg transition-all duration-300 ease-in-out ${actived == "home" ? "bg-primary-700 text-neutral-50" : "text-neutral-300 hover:bg-neutral-900 hover:text-neutral-50"}`}
@@ -41,7 +41,7 @@ const AdminSidebar = ({ isOpen, actived }) => {
                             </span>
                             <span>Início</span>
                         </Link>
-                    </li>
+                    </li> */}
                     <li>
                         <Link
                             href="/admin/publicacoes"

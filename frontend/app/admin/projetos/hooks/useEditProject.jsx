@@ -14,8 +14,9 @@ const useEditProject = () => {
     const [status, setStatus] = useState("");
     const [client, setClient] = useState("");
     const [partnerId, setPartnerId] = useState("");
-    const [startedDate, setStartedDate] = useState("");
-    const [endedDate, setEndedDate] = useState("");
+    const [startedYear, setStartedYear] = useState("");
+    const [endedYear, setEndedYear] = useState("");
+    const [url, setUrl] = useState("");
     const [memberIds, setMemberIds] = useState([]);
     const [imageFiles, setImageFiles] = useState([]);
     const [existingImageUrls, setExistingImageUrls] = useState([]);
@@ -38,8 +39,9 @@ const useEditProject = () => {
                 setStatus(project.status || "");
                 setClient(project.client || "");
                 setPartnerId(project.partnerId || "");
-                setStartedDate(project.startedDate ? project.startedDate.slice(0, 10) : "");
-                setEndedDate(project.endedDate ? project.endedDate.slice(0, 10) : "");
+                setStartedYear(project.startedYear || "");
+                setEndedYear(project.endedYear || "");
+                setUrl(project.url || "");
                 setMemberIds(
                     [...(project.members || [])].sort((a, b) => a.order - b.order).map((member) => member.personId),
                 );
@@ -63,7 +65,7 @@ const useEditProject = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!title.trim() || !description.trim() || !status.trim() || !startedDate) {
+        if (!title.trim() || !description.trim() || !status.trim() || !startedYear) {
             toast.error("Preencha todos os campos obrigatórios");
             return;
         }
@@ -92,8 +94,9 @@ const useEditProject = () => {
                 status,
                 client: client.trim(),
                 partnerId: partnerId || null,
-                startedDate,
-                endedDate: endedDate || null,
+                startedYear: Number(startedYear),
+                endedYear: endedYear ? Number(endedYear) : null,
+                url,
                 memberIds,
                 imageUrls,
             });
@@ -121,10 +124,12 @@ const useEditProject = () => {
         setClient,
         partnerId,
         setPartnerId,
-        startedDate,
-        setStartedDate,
-        endedDate,
-        setEndedDate,
+        startedYear,
+        setStartedYear,
+        endedYear,
+        setEndedYear,
+        url,
+        setUrl,
         memberIds,
         setMemberIds,
         imageFiles,

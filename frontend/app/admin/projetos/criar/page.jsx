@@ -32,10 +32,12 @@ const CreateProjectPage = () => {
         setClient,
         partnerId,
         setPartnerId,
-        startedDate,
-        setStartedDate,
-        endedDate,
-        setEndedDate,
+        startedYear,
+        setStartedYear,
+        endedYear,
+        setEndedYear,
+        url,
+        setUrl,
         memberIds,
         setMemberIds,
         imageFiles,
@@ -126,22 +128,24 @@ const CreateProjectPage = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <InputField
-                                id="startedDate"
-                                label="Data de Início *"
-                                type="date"
+                                id="startedYear"
+                                label="Ano de Início *"
+                                placeholder="Ex: 2025"
+                                type="number"
                                 disabled={isLoading}
-                                value={startedDate}
-                                onChange={(e) => setStartedDate(e.target.value)}
+                                value={startedYear}
+                                onChange={(e) => setStartedYear(e.target.value)}
                                 required
                             />
 
                             <InputField
-                                id="endedDate"
-                                label="Data de Término"
-                                type="date"
+                                id="endedYear"
+                                label="Ano de Término"
+                                placeholder="Ex: 2026"
+                                type="number"
                                 disabled={isLoading}
-                                value={endedDate}
-                                onChange={(e) => setEndedDate(e.target.value)}
+                                value={endedYear}
+                                onChange={(e) => setEndedYear(e.target.value)}
                             />
                         </div>
 
@@ -167,6 +171,15 @@ const CreateProjectPage = () => {
                                 className="px-4 py-3 bg-neutral-50 border border-neutral-400 rounded-lg text-sm text-neutral-950 font-sans placeholder:text-neutral-400 resize-none"
                             />
                         </div>
+
+                        <InputField
+                            id="url"
+                            label="Link do Projeto"
+                            placeholder="Ex: https://gpesfatectq.com.br/"
+                            disabled={isLoading}
+                            value={url}
+                            onChange={(e) => setUrl(e.target.value)}
+                        />
 
                         <MultiFileInput
                             id="images"

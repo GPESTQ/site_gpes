@@ -33,7 +33,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
                     PUBLICAÇÕES
                 </Link>
                 <Link
-                    href="/pessoas"
+                    href="/projetos"
                     className="text-neutral-300 font-sans font-medium text-sm hover:text-neutral-50 transition-all duration-300 ease-in-out"
                 >
                     PROJETOS
@@ -45,7 +45,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
                     PESSOAS
                 </Link>
                 <Link
-                    href="/pessoas"
+                    href="/sobre"
                     className="text-neutral-300 font-sans font-medium text-sm hover:text-neutral-50 transition-all duration-300 ease-in-out"
                 >
                     SOBRE NÓS

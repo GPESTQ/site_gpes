@@ -49,7 +49,7 @@ const PersonMultiSelect = ({ label, options, selected, onChange, disabled }) => 
                     onClick={() => setIsOpen((prev) => !prev)}
                     className="w-full flex items-center justify-between px-4 py-3 bg-neutral-50 border border-neutral-400 rounded-lg text-sm text-neutral-950 font-sans disabled:opacity-60"
                 >
-                    <span className={selected.length === 0 ? "text-neutral-600" : ""}>
+                    <span className={selected.length === 0 ? "text-neutral-400" : ""}>
                         {selected.length === 0
                             ? "Selecione os autores"
                             : `${selected.length} autor${selected.length > 1 ? "es" : ""} selecionado${selected.length > 1 ? "s" : ""}`}

@@ -5,7 +5,7 @@ const MAX_IMAGES = 10;
 export async function getAllProjects(_, res) {
     try {
         const projects = await prisma.project.findMany({
-            orderBy: { startedDate: "desc" },
+            orderBy: { startedYear: "desc" },
             include: {
                 partner: true,
                 members: {
@@ -52,8 +52,9 @@ export async function createProject(req, res) {
             status,
             client,
             partnerId,
-            startedDate,
-            endedDate,
+            startedYear,
+            endedYear,
+            url,
             memberIds = [],
             imageUrls = [],
         } = req.body;
@@ -70,8 +71,9 @@ export async function createProject(req, res) {
                 status,
                 client,
                 partnerId: partnerId || null,
-                startedDate: new Date(startedDate),
-                endedDate: endedDate ? new Date(endedDate) : null,
+                startedYear,
+                endedYear,
+                url,
                 members: {
                     create: memberIds.map((personId, index) => ({ personId, order: index + 1 })),
                 },
@@ -102,8 +104,9 @@ export async function updateProject(req, res) {
             status,
             client,
             partnerId,
-            startedDate,
-            endedDate,
+            startedYear,
+            endedYear,
+            url,
             memberIds = [],
             imageUrls = [],
         } = req.body;
@@ -121,8 +124,9 @@ export async function updateProject(req, res) {
                 status,
                 client,
                 partnerId: partnerId || null,
-                startedDate: new Date(startedDate),
-                endedDate: endedDate ? new Date(endedDate) : null,
+                startedYear,
+                endedYear,
+                url,
                 members: {
                     deleteMany: {},
                     create: memberIds.map((personId, index) => ({ personId, order: index + 1 })),

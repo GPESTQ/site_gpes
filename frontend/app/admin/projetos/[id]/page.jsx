@@ -33,10 +33,12 @@ const EditProjectPage = () => {
         setClient,
         partnerId,
         setPartnerId,
-        startedDate,
-        setStartedDate,
-        endedDate,
-        setEndedDate,
+        startedYear,
+        setStartedYear,
+        endedYear,
+        setEndedYear,
+        url,
+        setUrl,
         memberIds,
         setMemberIds,
         imageFiles,
@@ -149,22 +151,22 @@ const EditProjectPage = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <InputField
-                                    id="startedDate"
-                                    label="Data de Início *"
-                                    type="date"
+                                    id="startedYear"
+                                    label="Ano de Início *"
+                                    type="number"
                                     disabled={isLoading}
-                                    value={startedDate}
-                                    onChange={(e) => setStartedDate(e.target.value)}
+                                    value={startedYear}
+                                    onChange={(e) => setStartedYear(e.target.value)}
                                     required
                                 />
 
                                 <InputField
-                                    id="endedDate"
-                                    label="Data de Término"
-                                    type="date"
+                                    id="endedYear"
+                                    label="Ano de Término"
+                                    type="number"
                                     disabled={isLoading}
-                                    value={endedDate}
-                                    onChange={(e) => setEndedDate(e.target.value)}
+                                    value={endedYear}
+                                    onChange={(e) => setEndedYear(e.target.value)}
                                 />
                             </div>
 
@@ -174,6 +176,15 @@ const EditProjectPage = () => {
                                 selected={memberIds}
                                 onChange={setMemberIds}
                                 disabled={isLoading}
+                            />
+
+                            <InputField
+                                id="url"
+                                label="Link do Projeto"
+                                placeholder="Ex: https://gpesfatectq.com.br/"
+                                disabled={isLoading}
+                                value={url}
+                                onChange={(e) => setUrl(e.target.value)}
                             />
 
                             <MultiFileInput

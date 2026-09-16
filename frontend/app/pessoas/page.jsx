@@ -1,6 +1,5 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,9 +8,9 @@ import { ROLE_FILTER_OPTIONS } from "@/lib/personOptions";
 import PageHeader from "../../components/PageHeader";
 import ItemsNotFoundCard from "../../components/ItemsNotFoundCard";
 import LoadingCard from "../../components/LoadingCard";
-import api from "@/lib/axios";
 import usePagination from "@/hooks/usePagination";
 import Pagination from "@/components/Pagination";
+import usePersons from "@/hooks/usePersons"
 
 const FILTER_OPTIONS = [
     { label: "TODOS", value: "all" },
@@ -19,9 +18,7 @@ const FILTER_OPTIONS = [
 ];
 
 const PersonsPage = () => {
-    const [persons, setPersons] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isRateLimit, setIsRateLimit] = useState(false);
+    const { persons, isRateLimited, isLoading } = usePersons();
     const [filter, setFilter] = useState("all");
     const [search, setSearch] = useState("");
     const [isOpen, setIsOpen] = useState(false);
@@ -33,26 +30,6 @@ const PersonsPage = () => {
     );
 
     const { paginatedItems, currentPage, totalPages, setCurrentPage, itemsPerPage } = usePagination(searchedPersons, 9);
-
-    useEffect(() => {
-        const fetchPersons = async () => {
-            try {
-                const res = await api.get("/persons");
-                setPersons(res.data);
-                setIsRateLimit(false);
-            } catch (error) {
-                console.error("Failed to fetch persons", error);
-                if (error.response?.status === 429) {
-                    setIsRateLimit(true);
-                } else {
-                    toast.error("Erro ao carregar as pessoas");
-                }
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchPersons();
-    }, []);
 
     return (
         <div className="flex flex-col bg-neutral-50 min-h-screen">
@@ -74,7 +51,7 @@ const PersonsPage = () => {
                 <div className="px-4 lg:px-20 py-6">
                     {isLoading && <LoadingCard text={"Carregando pessoas..."} />}
 
-                    {!isLoading && !isRateLimit && (
+                    {!isLoading && !isRateLimited && (
                         <>
                             {searchedPersons.length > 0 ? (
                                 <div className="flex flex-col gap-6">

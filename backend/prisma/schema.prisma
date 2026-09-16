@@ -99,8 +99,9 @@ model Project {
   client      String?
   partnerId   String?
   partner     Partner?        @relation(fields: [partnerId], references: [id])
-  startedDate DateTime
-  endedDate   DateTime?
+  startedYear Int
+  endedYear   Int?
+  url         String?
   members     ProjectMember[]
   images      ProjectImage[]
   createdAt   DateTime        @default(now())
