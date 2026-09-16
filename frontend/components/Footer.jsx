@@ -34,22 +34,22 @@ const Footer = () => {
                     <h2 className="text-neutral-50 font-sans font-bold">LINKS IMPORTANTES</h2>
                     <ul className="flex flex-col gap-2">
                         <li>
-                            <Link href="/papers" className="text-neutral-300 font-sans text-sm hover:text-neutral-50 transition-all duration-300">
+                            <Link href="/publicacoes" className="text-neutral-300 font-sans text-sm hover:text-neutral-50 transition-all duration-300">
                                 PUBLICAÇÕES
                             </Link>
                         </li>
                         <li>
-                            <Link href="/projects" className="text-neutral-300 font-sans text-sm hover:text-neutral-50 transition-all duration-300">
+                            <Link href="/projetos" className="text-neutral-300 font-sans text-sm hover:text-neutral-50 transition-all duration-300">
                                 PROJETOS
                             </Link>
                         </li>
                         <li>
-                            <Link href="/persons" className="text-neutral-300 font-sans text-sm hover:text-neutral-50 transition-all duration-300">
+                            <Link href="/pessoas" className="text-neutral-300 font-sans text-sm hover:text-neutral-50 transition-all duration-300">
                                 PESSOAS
                             </Link>
                         </li>
                         <li>
-                            <Link href="/about" className="text-neutral-300 font-sans text-sm hover:text-neutral-50 transition-all duration-300">
+                            <Link href="/sobre" className="text-neutral-300 font-sans text-sm hover:text-neutral-50 transition-all duration-300">
                                 SOBRE NÓS
                             </Link>
                         </li>
