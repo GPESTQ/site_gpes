@@ -20,17 +20,17 @@ const getPageNumbers = (currentPage, totalPages) => {
     return pages;
 };
 
-const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, itemsPerPage }) => {
+const Pagination = ({ currentPage, totalPages, onPageChange, items, itemsPerPage }) => {
     if (totalPages <= 1) return null;
 
     const pages = getPageNumbers(currentPage, totalPages);
 
     const startItem = (currentPage - 1) * itemsPerPage + 1;
-    const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+    const endItem = Math.min(currentPage * itemsPerPage, items);
 
     return (
         <div className="flex items-center justify-between gap-2">
-            <span className="font-sans text-sm text-shadow-neutral-950">{startItem}–{endItem} de {totalItems} resultados</span>
+            <span className="font-sans text-sm text-shadow-neutral-950">{startItem} a {endItem} de {items} resultados</span>
             <div className="flex items-center gap-2">
                 <button
                     onClick={() => onPageChange(currentPage - 1)}
